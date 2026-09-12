@@ -1,48 +1,7 @@
-const $ = (s) => document.querySelector(s);
-
-$("#openBtn").addEventListener("click", () => {
-  document.querySelector(".section").scrollIntoView({behavior:"smooth"});
-  startHearts();
-});
-
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("visible"); });
-},{threshold:.12});
-document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
-
-let heartTimer;
-function startHearts(){
-  if(heartTimer) return;
-  heartTimer=setInterval(()=>{
-    const h=document.createElement("span");
-    h.className="heart-float";
-    h.textContent=Math.random()>.35?"♡":"✦";
-    h.style.left=(Math.random()*100)+"%";
-    h.style.fontSize=(10+Math.random()*15)+"px";
-    h.style.setProperty("--drift",(Math.random()*100-50)+"px");
-    h.style.animationDuration=(7+Math.random()*7)+"s";
-    document.querySelector(".hearts").appendChild(h);
-    setTimeout(()=>h.remove(),15000);
-  },650);
-}
-startHearts();
-
-const modal=$("#modal"), typed=$("#typed");
-const message="Kalau suatu hari kamu bertanya seberapa berartinya kamu, mungkin aku tidak akan punya angka yang tepat. Aku cuma tahu: kehadiranmu membuat hidup terasa sedikit lebih indah. Jadi, tetaplah menjadi kamu. Tetap tersenyum. Dan jangan lupa... kamu sangat layak untuk dicintai. Selamat ulang tahun, sayang. ♡";
-$("#secretBtn").addEventListener("click",()=>{
-  modal.classList.add("show");
-  modal.setAttribute("aria-hidden","false");
-  typed.textContent="";
-  let i=0;
-  const timer=setInterval(()=>{
-    typed.textContent=message.slice(0,i++);
-    if(i>message.length) clearInterval(timer);
-  },28);
-});
-function closeModal(){
-  modal.classList.remove("show");
-  modal.setAttribute("aria-hidden","true");
-}
-$("#closeBtn").addEventListener("click",closeModal);
-modal.addEventListener("click",(e)=>{if(e.target===modal) closeModal()});
-document.addEventListener("keydown",(e)=>{if(e.key==="Escape") closeModal()});
+const modal=document.getElementById('modal'),typed=document.getElementById('typed'),finalHeart=document.getElementById('finalHeart');
+function openLetter(){document.querySelector('main').scrollIntoView({behavior:'smooth'})}
+function showSecret(){modal.classList.add('show');typed.textContent='';finalHeart.classList.remove('show');const text='Alfarizha, selamat ulang tahun yang ke-15. Kalau ada satu keinginan dariku untuk hari ini, aku cuma ingin bisa bertemu kamu besok sore, 13 September. Semoga senyummu selalu menemukan alasan untuk kembali. 🤍';let i=0;const t=setInterval(()=>{typed.textContent+=text[i++]||'';if(i>text.length){clearInterval(t);setTimeout(()=>finalHeart.classList.add('show'),300)}},32)}
+function closeSecret(){modal.classList.remove('show')}
+const music=document.getElementById('music'),btn=document.getElementById('musicBtn');btn.onclick=async()=>{try{if(music.paused){await music.play();btn.textContent='❚❚ Jeda musik'}else{music.pause();btn.textContent='♫ Putar musik'}}catch(e){btn.textContent='♫ Musik tidak tersedia'}};
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
+setInterval(()=>{const h=document.createElement('div');h.className='heart';h.textContent=['♡','♥','✦'][Math.floor(Math.random()*3)];h.style.left=Math.random()*100+'vw';h.style.setProperty('--x',(Math.random()*120-60)+'px');h.style.fontSize=(12+Math.random()*15)+'px';h.style.animationDuration=(5+Math.random()*5)+'s';document.getElementById('hearts').appendChild(h);setTimeout(()=>h.remove(),10000)},900);
